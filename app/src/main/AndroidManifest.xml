@@ -13,10 +13,11 @@
         android:theme="@style/Theme.HabitTracker"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".HabitApp"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.HabitTracker">
+            android:theme="@style/Theme.HabitTracker"
+            tools:ignore="Instantiatable">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

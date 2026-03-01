@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("kotlin-kapt")
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -50,6 +51,12 @@ android {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("com.squareup:javapoet:1.13.0")
+    }
+}
+
 dependencies {
 
     // Core
@@ -78,6 +85,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
 
+
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
@@ -89,4 +97,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+// ViewModel Compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

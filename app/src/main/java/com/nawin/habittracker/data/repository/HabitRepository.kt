@@ -1,23 +1,28 @@
 package com.nawin.habittracker.data.repository
 
-import com.nawin.habittracker.data.local.Habit
-import com.nawin.habittracker.data.local.HabitDao
+import com.nawin.habittracker.data.local.dao.HabitDao
+import com.nawin.habittracker.data.local.entity.HabitEntity
+import com.nawin.habittracker.data.local.entity.SubTaskEntity
 
 class HabitRepository(
-    private val dao: HabitDao
+    private val dao: HabitDao,
 ) {
 
     val habits = dao.getHabits()
 
-    suspend fun addHabit(name: String) {
-        dao.insertHabit(Habit(name = name))
+    suspend fun addHabit(title: String) {
+        val habitId = dao.insertHabit(HabitEntity(title = title)).toInt()
+
+        val defaultSubtasks = listOf(
+            SubTaskEntity(habitId = habitId, title = "Step 1"),
+            SubTaskEntity(habitId = habitId, title = "Step 2"),
+            SubTaskEntity(habitId = habitId, title = "Step 3")
+        )
+
+        dao.insertSubTasks(defaultSubtasks)
     }
 
-    suspend fun updateHabit(habit: Habit) {
-        dao.updateHabit(habit)
-    }
-
-    suspend fun deleteHabit(habit: Habit) {
-        dao.deleteHabit(habit)
+    suspend fun toggleSubTask(subTask: SubTaskEntity) {
+        dao.updateSubTask(subTask.copy(isDone = !subTask.isDone))
     }
 }
