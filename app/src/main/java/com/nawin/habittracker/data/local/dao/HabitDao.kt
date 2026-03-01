@@ -30,4 +30,14 @@ interface HabitDao {
 
     @Delete
     suspend fun deleteHabit(habit: HabitEntity)
+
+    @Update
+    suspend fun updateHabit(habit: HabitEntity)
+
+    @Insert
+    suspend fun insertSubTask(subTask: SubTaskEntity)
+
+    @Transaction
+    @Query("SELECT * FROM habits LIMIT 1")
+    suspend fun getHabitsOnce(): List<HabitWithSubTasks>
 }
