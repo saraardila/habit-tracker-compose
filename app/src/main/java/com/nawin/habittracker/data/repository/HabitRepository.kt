@@ -43,15 +43,15 @@ class HabitRepository(
         // se llama al init si no hay hábitos
     }
     suspend fun insertDefaultIfEmpty() {
-        val current = dao.getHabitsOnce() // necesitas añadir esta query
-        if (current.isEmpty()) {
-            val habitId = dao.insertHabit(HabitEntity(title = "Morning Routine")).toInt()
-            dao.insertSubTasks(listOf(
-                SubTaskEntity(habitId = habitId, title = "Drink water"),
-                SubTaskEntity(habitId = habitId, title = "Meditate 5 min"),
-                SubTaskEntity(habitId = habitId, title = "Stretch")
-            ))
-        }
+//        val current = dao.getHabitsOnce() // necesitas añadir esta query
+//        if (current.isEmpty()) {
+//            val habitId = dao.insertHabit(HabitEntity(title = "Morning Routine")).toInt()
+//            dao.insertSubTasks(listOf(
+//                SubTaskEntity(habitId = habitId, title = "Drink water"),
+//                SubTaskEntity(habitId = habitId, title = "Meditate 5 min"),
+//                SubTaskEntity(habitId = habitId, title = "Stretch")
+//            ))
+//        }
     }
     suspend fun toggleSubTask(subTask: SubTaskEntity) {
         dao.updateSubTask(subTask.copy(isDone = !subTask.isDone))
