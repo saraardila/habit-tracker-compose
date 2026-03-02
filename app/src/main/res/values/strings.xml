@@ -26,6 +26,11 @@
     <string name="nav_home">Home</string>
     <string name="nav_stats">Stats</string>
 
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_badges">Badges</string>
+    <string name="nav_settings">Settings</string>
+
+
     <!-- Habit DIalog -->
     <string name="dialog_title">New habit 🌾</string>
     <string name="checklist_label">Checklist</string>
@@ -40,6 +45,30 @@
     <string name="motiv_90">Almost there, cozy bear! ✨</string>
     <string name="motiv_100">Perfect day! You\'re a star! 🎊</string>
     <string name="topbar_title">Cozy Habits 🌸</string>
+
+    <string name="fab_add_habit">Add Habit</string>
+
+
+    <string name="greeting_morning">Good morning ☀️</string>
+    <string name="greeting_afternoon">Good afternoon 🌤️</string>
+    <string name="greeting_evening">Good evening 🌙</string>
+    <string name="streak_days">day streak</string>
+
+
+    <string name="nav_diary">Diary 📓</string>
+    <string name="badges_unlocked">badges unlocked</string>
+    <string name="settings_subtitle">Customize your cozy space 🐻</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_version">Version</string>
+    <string name="diary_add">New Entry</string>
+    <string name="diary_empty">No entries yet\nWrite your first note! 🌸</string>
+    <string name="diary_new_entry">How are you feeling? 🌸</string>
+    <string name="diary_mood">Pick your mood</string>
+    <string name="diary_placeholder">Write about your day…</string>
+    <string name="calendar_today">Today</string>
+    <string name="calendar_completed">Completed</string>
 
 </resources>
 

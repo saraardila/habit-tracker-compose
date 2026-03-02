@@ -9,26 +9,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.*
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-
+import androidx.navigation.compose.rememberNavController
 import com.nawin.habittracker.ui.components.AppTopBar
 import com.nawin.habittracker.ui.components.BottomNavBar
-import com.nawin.habittracker.ui.screens.HabitScreen
-import com.nawin.habittracker.ui.screens.StatsScreen
+import com.nawin.habittracker.ui.screens.*
 import com.nawin.habittracker.ui.theme.HabitTrackerTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainApp() {
 
     var darkMode by rememberSaveable { mutableStateOf(false) }
-    val navController = rememberAnimatedNavController()
+    val navController = rememberNavController()
 
     HabitTrackerTheme(darkTheme = darkMode) {
         Scaffold(
@@ -43,7 +37,7 @@ fun MainApp() {
             }
         ) { padding ->
 
-            AnimatedNavHost(
+            NavHost(
                 navController = navController,
                 startDestination = "home",
                 modifier = Modifier.padding(padding),
@@ -72,8 +66,16 @@ fun MainApp() {
                     ) + fadeOut(tween(350))
                 }
             ) {
-                composable("home") { HabitScreen() }
-                composable("stats") { StatsScreen() }
+                composable("home")     { HabitScreen() }
+                composable("stats")    { StatsScreen() }
+                composable("calendar") { CalendarScreen() }
+                composable("badges")   { BadgesScreen() }
+                composable("settings") {
+                    SettingsScreen(          // 👈 aquí le pasas isDark y onToggleDark
+                        isDark = darkMode,
+                        onToggleDark = { darkMode = !darkMode }
+                    )
+                }
             }
         }
     }

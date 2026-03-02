@@ -2,14 +2,10 @@ package com.nawin.habittracker.ui.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -18,8 +14,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight.Companion.SemiBold
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nawin.habittracker.data.local.entity.HabitWithSubTasks
@@ -27,14 +25,12 @@ import com.nawin.habittracker.ui.components.CreateHabitDialog
 import com.nawin.habittracker.ui.components.EmptyState
 import com.nawin.habittracker.ui.components.HabitCard
 import com.nawin.habittracker.ui.components.HeaderSection
+import com.nawin.habittracker.ui.theme.CreamWhite
+import com.nawin.habittracker.ui.theme.Matcha
 import com.nawin.habittracker.ui.viewmodel.HabitViewModel
-import kotlinx.coroutines.delay
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.rememberSwipeToDismissBoxState
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.zIndex
+import com.nawin.habittracker.R
+import com.nawin.habittracker.ui.components.WeeklyHeader
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,14 +44,21 @@ fun HabitScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = { showDialog = true },
-                shape = CircleShape,
-                containerColor = Color(0xFFFFC0CB), // pastel rosa tipo flor
-                modifier = Modifier.size(64.dp)
-            ) {
-                Text("🌸", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-            }
+                shape = RoundedCornerShape(20.dp),
+                containerColor = Matcha,
+                contentColor = CreamWhite,
+                icon = {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                },
+                text = {
+                    Text(
+                        text = stringResource(R.string.fab_add_habit),
+                        fontWeight = SemiBold
+                    )
+                }
+            )
         }
     ) { padding ->
 
@@ -69,9 +72,12 @@ fun HabitScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 item {
-                    HeaderSection(progress = calculateDailyProgress(habits))
+                    WeeklyHeader(
+                        progress = calculateDailyProgress(habits),
+                        currentStreak = habits.maxOfOrNull { it.habit.currentStreak } ?: 0,
+                        completedDays = emptyMap() // por ahora, luego conectamos con Room
+                    )
                 }
-
                 items(habits, key = { it.habit.id }) { habitWithSubTasks ->
 
                     // Swipe para eliminar solo a la derecha
@@ -111,7 +117,12 @@ fun HabitScreen(
                         HabitCard(
                             habitWithSubTasks = habitWithSubTasks,
                             onToggle = viewModel::toggleSubTask,
-                            onRenameHabit = { viewModel.updateHabitTitle(habitWithSubTasks.habit, it) },
+                            onRenameHabit = {
+                                viewModel.updateHabitTitle(
+                                    habitWithSubTasks.habit,
+                                    it
+                                )
+                            },
                             onDelete = { viewModel.deleteHabit(habitWithSubTasks.habit) }
                         )
                     }
@@ -134,7 +145,7 @@ fun HabitScreen(
 
 // Calcula progreso total diario
 fun calculateDailyProgress(
-    habits: List<HabitWithSubTasks>
+    habits: List<HabitWithSubTasks>,
 ): Float {
     val total = habits.sumOf { it.subTasks.size }
     val completed = habits.sumOf { habit -> habit.subTasks.count { it.isDone } }

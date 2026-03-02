@@ -5,8 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,43 +13,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.nawin.habittracker.R
 import com.nawin.habittracker.ui.theme.*
+
+sealed class NavScreen(
+    val route: String,
+    val icon: ImageVector,
+    val labelRes: Int
+) {
+    object Home     : NavScreen("home",     Icons.Default.Home,        R.string.nav_home)
+    object Calendar : NavScreen("calendar", Icons.Default.CalendarMonth, R.string.nav_calendar)
+    object Badges   : NavScreen("badges",   Icons.Default.EmojiEvents,  R.string.nav_badges)
+    object Stats    : NavScreen("stats",    Icons.Default.BarChart,     R.string.nav_stats)
+    object Settings : NavScreen("settings", Icons.Default.Settings,     R.string.nav_settings)
+}
 
 @Composable
 fun BottomNavBar(navController: NavController) {
 
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
 
+    val items = listOf(
+        NavScreen.Home,
+        NavScreen.Calendar,
+        NavScreen.Badges,
+        NavScreen.Stats,
+        NavScreen.Settings
+    )
+
     NavigationBar(
         containerColor = BabyPinkLight,
         tonalElevation = 0.dp,
         modifier = Modifier.clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
     ) {
-        NavItem(
-            icon = Icons.Default.Home,
-            label = "Home",
-            selected = currentRoute == "home",
-            onClick = {
-                navController.navigate("home") {
-                    popUpTo("home") { inclusive = true }
+        items.forEach { screen ->
+            NavItem(
+                icon = screen.icon,
+                label = stringResource(screen.labelRes),
+                selected = currentRoute == screen.route,
+                onClick = {
+                    navController.navigate(screen.route) {
+                        popUpTo("home") { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
-            }
-        )
-        NavItem(
-            icon = Icons.Default.BarChart,
-            label = "Stats",
-            selected = currentRoute == "stats",
-            onClick = {
-                navController.navigate("stats") {
-                    popUpTo("home") { saveState = true }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
-        )
+            )
+        }
     }
 }
 
@@ -61,7 +74,6 @@ private fun RowScope.NavItem(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    // Animación de escala al seleccionar
     val scale by animateFloatAsState(
         targetValue = if (selected) 1.2f else 1f,
         animationSpec = spring(
@@ -76,7 +88,6 @@ private fun RowScope.NavItem(
         onClick = onClick,
         icon = {
             Box(contentAlignment = Alignment.Center) {
-                // Pill de fondo cuando está seleccionado
                 if (selected) {
                     Box(
                         modifier = Modifier
