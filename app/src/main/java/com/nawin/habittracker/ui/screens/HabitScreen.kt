@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.zIndex
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -89,18 +91,21 @@ fun HabitScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
+                                    .clip(RoundedCornerShape(16.dp))
                                     .background(Color(0xFFFFA5A5))
                                     .padding(end = 24.dp),
                                 contentAlignment = Alignment.CenterEnd
                             ) {
                                 Icon(
-                                    imageVector = Icons.Default.Add, // Cambia icono si quieres
+                                    imageVector = Icons.Default.Delete,
                                     contentDescription = null,
                                     tint = Color.White
                                 )
                             }
                         },
-                        modifier = Modifier.padding(vertical = 4.dp)
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .clip(RoundedCornerShape(16.dp))
                     ) {
 
                         HabitCard(

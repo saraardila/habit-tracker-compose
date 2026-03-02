@@ -1,22 +1,26 @@
 package com.nawin.habittracker.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.nawin.habittracker.R
+import com.nawin.habittracker.ui.theme.*
 
 @Composable
 fun CreateHabitDialog(
@@ -29,51 +33,132 @@ fun CreateHabitDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(28.dp),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = BabyPinkLight,
         title = {
             Text(
-                "Create a new habit 🌾",
-                style = MaterialTheme.typography.headlineSmall
+                text = stringResource(R.string.dialog_title),
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = MatchaDark
             )
         },
         text = {
             Column(
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
 
+                // Campo título
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
-                    placeholder = { Text("Morning routine") },
+                    placeholder = {
+                        Text(
+                            stringResource(R.string.habit_title_hint),
+                            color = MatchaDark.copy(alpha = 0.4f)
+                        )
+                    },
                     shape = RoundedCornerShape(18.dp),
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Matcha,
+                        unfocusedBorderColor = BabyPink,
+                        focusedLabelColor = Matcha,
+                        cursorColor = Matcha
+                    )
+                )
+
+                // Separador con gradiente
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp)
+                        .clip(RoundedCornerShape(1.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(BabyPink, Matcha)
+                            )
+                        )
                 )
 
                 Text(
-                    "Checklist",
-                    style = MaterialTheme.typography.labelLarge
+                    text = stringResource(R.string.checklist_label),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MatchaDark,
+                    fontWeight = FontWeight.SemiBold
                 )
 
+                // Subtasks — BUG ARREGLADO AQUÍ
                 subtasks.forEachIndexed { index, value ->
-
-                    OutlinedTextField(
-                        value = value,
-                        onValueChange = {
-                            subtasks = subtasks.toMutableList().also {
-                                it[index] = it.toString()
+                    AnimatedVisibility(
+                        visible = true,
+                        enter = fadeIn(tween(200)) + slideInVertically(tween(200))
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "🌿",
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            OutlinedTextField(
+                                value = value,
+                                onValueChange = { newValue ->
+                                    // ✅ ARREGLADO: usa newValue, no it
+                                    subtasks = subtasks.toMutableList().also { list ->
+                                        list[index] = newValue
+                                    }
+                                },
+                                placeholder = {
+                                    Text(
+                                        "${stringResource(R.string.task_hint)} ${index + 1}",
+                                        color = MatchaDark.copy(alpha = 0.4f)
+                                    )
+                                },
+                                shape = RoundedCornerShape(14.dp),
+                                modifier = Modifier.weight(1f),
+                                singleLine = true,
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = Matcha,
+                                    unfocusedBorderColor = BabyPink,
+                                    cursorColor = Matcha
+                                )
+                            )
+                            // Botón eliminar tarea
+                            if (subtasks.size > 1) {
+                                IconButton(onClick = {
+                                    subtasks = subtasks.toMutableList()
+                                        .also { it.removeAt(index) }
+                                }) {
+                                    Icon(
+                                        Icons.Default.Close,
+                                        contentDescription = null,
+                                        tint = BabyPinkDark
+                                    )
+                                }
                             }
-                        },
-                        shape = RoundedCornerShape(14.dp),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
+                        }
+                    }
                 }
 
+                // Añadir tarea
                 TextButton(
-                    onClick = { subtasks = subtasks + "" }
+                    onClick = { subtasks = subtasks + "" },
+                    modifier = Modifier.align(Alignment.End)
                 ) {
-                    Text("+ Add another task")
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Matcha
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text(
+                        stringResource(R.string.add_task),
+                        color = Matcha,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         },
@@ -84,9 +169,24 @@ fun CreateHabitDialog(
                         onCreate(title, subtasks.filter { it.isNotBlank() })
                     }
                 },
-                shape = RoundedCornerShape(20.dp)
+                shape = RoundedCornerShape(20.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Matcha,
+                    contentColor = CreamWhite
+                )
             ) {
-                Text("Create Habit")
+                Text(
+                    stringResource(R.string.create),
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    stringResource(R.string.cancel),
+                    color = MatchaDark.copy(alpha = 0.6f)
+                )
             }
         }
     )

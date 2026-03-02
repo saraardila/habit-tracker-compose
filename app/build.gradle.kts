@@ -107,4 +107,5 @@ dependencies {
 // Iconos y efectos
     implementation("androidx.compose.material:material-icons-extended")
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+    implementation(libs.accompanist.navigation.animation)
 }

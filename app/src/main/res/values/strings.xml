@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">HabitTracker</string>
+
+    <!-- Header -->
+    <string name="header_greeting">Good Morning 🍵</string>
+    <string name="progress_label">%1$d%% completed today</string>
+
+    <!-- Bear messages -->
+    <string name="bear_0">Let\'s start, little bear~ 🍵</string>
+    <string name="bear_30">You got this, cozy bear! 🌿</string>
+    <string name="bear_60">Halfway there, keep going! 🌸</string>
+    <string name="bear_90">Almost done, you\'re amazing! ⭐</string>
+    <string name="bear_100">All done! You\'re a superstar! 🎊</string>
+
+    <!-- Habits -->
+    <string name="new_habit">New Habit</string>
+    <string name="habit_title_hint">Habit title</string>
+    <string name="task_hint">Task</string>
+    <string name="add_task">Add task</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty_state">No habits yet 🌸</string>
+    <string name="create_first">Create your first habit</string>
+
+    <!-- Nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_stats">Stats</string>
+
+    <!-- Habit DIalog -->
+    <string name="dialog_title">New habit 🌾</string>
+    <string name="checklist_label">Checklist</string>
+
+    <string name="badge_perfect_day">🎊 Perfect day!</string>
+    <string name="stats_title">Your Progress 🌿</string>
+    <string name="stat_tasks_done">Tasks done</string>
+    <string name="stat_habits_done">Habits done</string>
+    <string name="motiv_0">Start your first habit today! 🌱</string>
+    <string name="motiv_30">Great start, keep going! 🐻</string>
+    <string name="motiv_60">You\'re doing amazing! 🌸</string>
+    <string name="motiv_90">Almost there, cozy bear! ✨</string>
+    <string name="motiv_100">Perfect day! You\'re a star! 🎊</string>
+    <string name="topbar_title">Cozy Habits 🌸</string>
+
 </resources>
+
