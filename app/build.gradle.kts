@@ -103,4 +103,8 @@ dependencies {
 
 // ViewModel Compose
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+// Iconos y efectos
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
 }
