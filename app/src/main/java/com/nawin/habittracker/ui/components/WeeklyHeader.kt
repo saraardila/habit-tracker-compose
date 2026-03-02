@@ -3,14 +3,30 @@ package com.nawin.habittracker.ui.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.EaseInOutSine
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,9 +37,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.nawin.habittracker.R
-import com.nawin.habittracker.ui.theme.*
+import com.nawin.habittracker.ui.theme.BabyPink
+import com.nawin.habittracker.ui.theme.BabyPinkLight
+import com.nawin.habittracker.ui.theme.CreamWhite
+import com.nawin.habittracker.ui.theme.Matcha
+import com.nawin.habittracker.ui.theme.MatchaDark
+import com.nawin.habittracker.ui.theme.MatchaLight
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -32,12 +59,15 @@ import java.util.Locale
 fun WeeklyHeader(
     progress: Float,
     currentStreak: Int,
-    completedDays: Map<String, Float> // fecha -> completion rate
+    completedDays: Map<String, Float>, // fecha -> completion rate
 ) {
     val today = LocalDate.now()
+    // Progreso seguro
+    val isCompleted = progress >= 0.99f
 
     // Bounce osito
     val infiniteTransition = rememberInfiniteTransition(label = "bear")
+
     val scale by infiniteTransition.animateFloat(
         initialValue = 1f,
         targetValue = 1.08f,
@@ -48,28 +78,53 @@ fun WeeklyHeader(
         label = "bounce"
     )
 
-    val bear = when {
-        progress == 0f  -> "🐻"
-        progress < 0.3f -> "🐻"
-        progress < 0.6f -> "🐻‍❄️"
-        progress < 1f   -> "✨🐻✨"
-        else            -> "🎉🐻🎉"
+
+// Elegimos animación según progreso
+    val bearAnimationRes = when {
+        progress == 0f   -> R.raw.angry_dog
+        progress < 0.3f  -> R.raw.angry_dog
+        progress < 0.6f  -> R.raw.happy_dog
+        progress < 1f    -> R.raw.happyunicorn_dog
+        else             -> R.raw.astro_dog
     }
+
+//    // Elegimos animación según progreso
+//    val bearAnimationRes = when {
+//        progress == 0f -> R.raw.kawaii_cry
+//        progress < 0.3f -> R.raw.kawaii_cry
+//        progress < 0.6f -> R.raw.kawaii_hi
+//        progress < 1f -> R.raw.kawaii_star
+//        else -> R.raw.kawaii_love
+//    }
+
+// Cargamos composición dinámica
+    val bearComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(bearAnimationRes)
+    )
+
+    val bearProgress by animateLottieCompositionAsState(
+        composition = bearComposition,
+        isPlaying = true,
+        iterations = LottieConstants.IterateForever
+    )
+
 
     val message = when {
-        progress == 0f  -> stringResource(R.string.bear_0)
+        progress == 0f -> stringResource(R.string.bear_0)
         progress < 0.3f -> stringResource(R.string.bear_30)
         progress < 0.6f -> stringResource(R.string.bear_60)
-        progress < 1f   -> stringResource(R.string.bear_90)
-        else            -> stringResource(R.string.bear_100)
+        progress < 1f -> stringResource(R.string.bear_90)
+        else -> stringResource(R.string.bear_100)
     }
 
+
     // Frase motivacional del día según hora
-    val hour = remember { today.atStartOfDay().hour }
+// Hora real (FIX)
+    val hour = LocalTime.now().hour
     val greeting = when {
         hour < 12 -> stringResource(R.string.greeting_morning)
         hour < 18 -> stringResource(R.string.greeting_afternoon)
-        else      -> stringResource(R.string.greeting_evening)
+        else -> stringResource(R.string.greeting_evening)
     }
 
     Column(
@@ -99,7 +154,10 @@ fun WeeklyHeader(
                 )
                 Text(
                     text = today.format(
-                        java.time.format.DateTimeFormatter.ofPattern("EEEE, MMM d", Locale.getDefault())
+                        java.time.format.DateTimeFormatter.ofPattern(
+                            "EEEE, MMM d",
+                            Locale.getDefault()
+                        )
                     ),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
@@ -134,11 +192,15 @@ fun WeeklyHeader(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = bear,
-                fontSize = 48.sp,
-                modifier = Modifier.scale(scale)
-            )
+            key(bearAnimationRes) {
+                LottieAnimation(
+                    composition = bearComposition,
+                    progress = { bearProgress },
+                    modifier = Modifier
+                        .size(120.dp)
+                        .scale(if (isCompleted) 1f else scale)
+                )
+            }
             Column {
                 Text(
                     text = message,
@@ -147,7 +209,10 @@ fun WeeklyHeader(
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "${(progress * 100).toInt()}% ${stringResource(R.string.progress_label)}",
+                    text = stringResource(
+                        R.string.progress_label,
+                        (progress * 100).toInt()
+                    ),
                     style = MaterialTheme.typography.labelSmall,
                     color = MatchaDark.copy(alpha = 0.6f)
                 )
@@ -192,7 +257,7 @@ fun WeeklyHeader(
 @Composable
 fun WeeklyCalendar(
     today: LocalDate,
-    completedDays: Map<String, Float>
+    completedDays: Map<String, Float>,
 ) {
     val weekDays = (-3..3).map { today.plusDays(it.toLong()) }
 
@@ -229,10 +294,10 @@ fun WeeklyCalendar(
                         .background(
                             when {
                                 isToday && isDone -> Matcha
-                                isToday          -> BabyPink
-                                isDone           -> MatchaLight
-                                isPast           -> CreamWhite.copy(alpha = 0.5f)
-                                else             -> CreamWhite.copy(alpha = 0.3f)
+                                isToday -> BabyPink
+                                isDone -> MatchaLight
+                                isPast -> CreamWhite.copy(alpha = 0.5f)
+                                else -> CreamWhite.copy(alpha = 0.3f)
                             }
                         )
                         .then(
@@ -242,7 +307,12 @@ fun WeeklyCalendar(
                     contentAlignment = Alignment.Center
                 ) {
                     if (isDone) {
-                        Text("✓", fontSize = 14.sp, color = MatchaDark, fontWeight = FontWeight.Bold)
+                        Text(
+                            "✓",
+                            fontSize = 14.sp,
+                            color = MatchaDark,
+                            fontWeight = FontWeight.Bold
+                        )
                     } else {
                         Text(
                             text = day.dayOfMonth.toString(),

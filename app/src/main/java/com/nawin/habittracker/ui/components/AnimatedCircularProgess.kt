@@ -82,8 +82,10 @@ fun AnimatedCircularProgress(progress: Float) {
                     color = MatchaDark
                 )
                 Text(
-                    text = stringResource(R.string.progress_label),
-                    style = MaterialTheme.typography.labelSmall,
+                    text = stringResource(
+                        R.string.progress_label,
+                        (progress * 100).toInt()
+                    ),                    style = MaterialTheme.typography.labelSmall,
                     color = MatchaDark.copy(alpha = 0.6f)
                 )
             }

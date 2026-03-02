@@ -36,13 +36,27 @@ fun HeaderSection(progress: Float) {
         label = "bounce"
     )
 
-    val bear = when {
-        progress == 0f   -> "🐻"
-        progress < 0.3f  -> "🐻"
-        progress < 0.6f  -> "🐻‍❄️"
-        progress < 1f    -> "✨🐻✨"
-        else             -> "🎉🐻🎉"
+// Elegimos animación según progreso
+    val bearAnimationRes = when {
+        progress == 0f   -> R.raw.angry_dog
+        progress < 0.3f  -> R.raw.angry_dog
+        progress < 0.6f  -> R.raw.astro_dog
+        progress < 1f    -> R.raw.happyunicorn_dog
+        else             -> R.raw.happy_dog
     }
+
+// Cargamos composición dinámica
+    val bearComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(bearAnimationRes)
+    )
+
+    val bearProgress by animateLottieCompositionAsState(
+        composition = bearComposition,
+        isPlaying = true,
+        iterations = LottieConstants.IterateForever
+    )
+
+
 
     val message = when {
         progress == 0f   -> stringResource(R.string.bear_0)
@@ -90,10 +104,12 @@ fun HeaderSection(progress: Float) {
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-            Text(
-                text = bear,
-                fontSize = 64.sp,
-                modifier = Modifier.scale(scale)
+            LottieAnimation(
+                composition = bearComposition,
+                progress = { bearProgress },
+                modifier = Modifier
+                    .size(120.dp)
+                    .scale(scale) // mantenemos el bounce
             )
 
             Spacer(Modifier.height(8.dp))
