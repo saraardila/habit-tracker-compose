@@ -66,10 +66,13 @@ fun MainApp() {
                     ) + fadeOut(tween(350))
                 }
             ) {
-                composable("home")     { HabitScreen() }
-                composable("stats")    { StatsScreen() }
-                composable("calendar") { CalendarScreen() }
+                composable("home") {
+                    HabitScreen(navController = navController)
+                }
+//                composable("stats")    { StatsScreen() }
+//                composable("calendar") { CalendarScreen() }
                 composable("badges")   { BadgesScreen() }
+                composable("diary") { DiaryScreen() }
                 composable("settings") {
                     SettingsScreen(          // 👈 aquí le pasas isDark y onToggleDark
                         isDark = darkMode,

@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
@@ -37,18 +38,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.nawin.habittracker.R
+import com.nawin.habittracker.data.preferences.getAnimationRes
 import com.nawin.habittracker.ui.theme.BabyPink
 import com.nawin.habittracker.ui.theme.BabyPinkLight
 import com.nawin.habittracker.ui.theme.CreamWhite
 import com.nawin.habittracker.ui.theme.Matcha
 import com.nawin.habittracker.ui.theme.MatchaDark
 import com.nawin.habittracker.ui.theme.MatchaLight
+import com.nawin.habittracker.ui.viewmodel.PetViewModel
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.TextStyle
@@ -60,6 +64,7 @@ fun WeeklyHeader(
     progress: Float,
     currentStreak: Int,
     completedDays: Map<String, Float>, // fecha -> completion rate
+    petViewModel: PetViewModel = hiltViewModel()
 ) {
     val today = LocalDate.now()
     // Progreso seguro
@@ -78,24 +83,12 @@ fun WeeklyHeader(
         label = "bounce"
     )
 
+    val activePet by petViewModel.activePet.collectAsState()
 
 // Elegimos animación según progreso
-    val bearAnimationRes = when {
-        progress == 0f   -> R.raw.angry_dog
-        progress < 0.3f  -> R.raw.angry_dog
-        progress < 0.6f  -> R.raw.happy_dog
-        progress < 1f    -> R.raw.happyunicorn_dog
-        else             -> R.raw.astro_dog
-    }
+    val bearAnimationRes = activePet.getAnimationRes(progress)
 
-//    // Elegimos animación según progreso
-//    val bearAnimationRes = when {
-//        progress == 0f -> R.raw.kawaii_cry
-//        progress < 0.3f -> R.raw.kawaii_cry
-//        progress < 0.6f -> R.raw.kawaii_hi
-//        progress < 1f -> R.raw.kawaii_star
-//        else -> R.raw.kawaii_love
-//    }
+
 
 // Cargamos composición dinámica
     val bearComposition by rememberLottieComposition(

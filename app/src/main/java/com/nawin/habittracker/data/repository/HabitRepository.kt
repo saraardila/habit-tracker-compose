@@ -56,4 +56,8 @@ class HabitRepository(
     suspend fun toggleSubTask(subTask: SubTaskEntity) {
         dao.updateSubTask(subTask.copy(isDone = !subTask.isDone))
     }
+
+    suspend fun updateSubTask(subTask: SubTaskEntity) {
+        dao.updateSubTask(subTask)
+    }
 }

@@ -70,5 +70,11 @@
     <string name="calendar_today">Today</string>
     <string name="calendar_completed">Completed</string>
 
+    <string name="pets_title">Your Pets 🐾</string>
+    <string name="badges_title">Achievements 🏆</string>
+    <string name="pet_active">✓ Active</string>
+    <string name="pet_tap_to_select">Tap to select</string>
+
+
 </resources>
 

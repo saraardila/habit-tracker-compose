@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -19,23 +20,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.nawin.habittracker.R
+import com.nawin.habittracker.data.local.entity.DiaryEntity
 import com.nawin.habittracker.ui.theme.*
-import java.text.SimpleDateFormat
-import java.util.*
+import com.nawin.habittracker.ui.viewmodel.DiaryViewModel
 
-data class DiaryEntry(
-    val id: Long = System.currentTimeMillis(),
-    val text: String,
-    val emoji: String,
-    val date: String = SimpleDateFormat("MMM d, yyyy", Locale.getDefault()).format(Date())
-)
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DiaryScreen() {
-    var entries by remember { mutableStateOf(listOf<DiaryEntry>()) }
+fun DiaryScreen(
+    viewModel: DiaryViewModel = hiltViewModel()
+) {
+    val entries by viewModel.entries.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
-
     var visible by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) { visible = true }
 
@@ -101,9 +98,43 @@ fun DiaryScreen() {
                         }
                     }
                 } else {
-                    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        items(entries.sortedByDescending { it.id }) { entry ->
-                            DiaryEntryCard(entry = entry)
+                    LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(bottom = 100.dp)
+                    ) {
+                        items(entries, key = { it.id }) { entry ->
+                            val dismissState = rememberSwipeToDismissBoxState(
+                                confirmValueChange = { value ->
+                                    if (value == SwipeToDismissBoxValue.EndToStart) {
+                                        viewModel.deleteEntry(entry)
+                                        true
+                                    } else false
+                                }
+                            )
+
+                            SwipeToDismissBox(
+                                state = dismissState,
+                                enableDismissFromStartToEnd = false,
+                                backgroundContent = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .clip(RoundedCornerShape(20.dp))
+                                            .background(BabyPink.copy(alpha = 0.8f))
+                                            .padding(end = 24.dp),
+                                        contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Delete,
+                                            contentDescription = null,
+                                            tint = MatchaDark
+                                        )
+                                    }
+                                },
+                                modifier = Modifier.clip(RoundedCornerShape(20.dp))
+                            ) {
+                                DiaryEntryCard(entry = entry)
+                            }
                         }
                     }
                 }
@@ -116,7 +147,7 @@ fun DiaryScreen() {
             moodEmojis = moodEmojis,
             onDismiss = { showDialog = false },
             onSave = { text, emoji ->
-                entries = entries + DiaryEntry(text = text, emoji = emoji)
+                viewModel.addEntry(text, emoji)
                 showDialog = false
             }
         )
@@ -124,7 +155,7 @@ fun DiaryScreen() {
 }
 
 @Composable
-fun DiaryEntryCard(entry: DiaryEntry) {
+fun DiaryEntryCard(entry: DiaryEntity) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -175,13 +206,15 @@ fun DiaryEntryDialog(
         },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                // Selector de emoji
                 Text(
                     text = stringResource(R.string.diary_mood),
                     style = MaterialTheme.typography.labelLarge,
                     color = MatchaDark
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     moodEmojis.forEach { emoji ->
                         TextButton(
                             onClick = { selectedEmoji = emoji },

@@ -1,9 +1,11 @@
 package com.nawin.habittracker.di
 
 import android.content.Context
-import androidx.room.Room
+import com.nawin.habittracker.data.local.dao.DiaryDao
 import com.nawin.habittracker.data.local.dao.HabitDao
 import com.nawin.habittracker.data.local.dao.HabitDatabase
+import com.nawin.habittracker.data.preferences.PetPreferences
+import com.nawin.habittracker.data.repository.DiaryRepository
 import com.nawin.habittracker.data.repository.HabitRepository
 import dagger.Module
 import dagger.Provides
@@ -20,24 +22,27 @@ object AppModule {
     @Singleton
     fun provideDatabase(
         @ApplicationContext context: Context
-    ): HabitDatabase {
-        return Room.databaseBuilder(
-            context,
-            HabitDatabase::class.java,
-            "habit_db"
-        ).build()
-    }
-
-    @Provides
-    fun provideHabitDao(
-        database: HabitDatabase
-    ): HabitDao = database.habitDao()
+    ): HabitDatabase = HabitDatabase.getDatabase(context)
 
     @Provides
     @Singleton
-    fun provideRepository(
-        dao: HabitDao
-    ): HabitRepository {
-        return HabitRepository(dao)
-    }
+    fun provideHabitDao(db: HabitDatabase): HabitDao = db.habitDao()
+
+    @Provides
+    @Singleton
+    fun provideDiaryDao(db: HabitDatabase): DiaryDao = db.diaryDao()
+
+    @Provides
+    @Singleton
+    fun provideHabitRepository(dao: HabitDao): HabitRepository = HabitRepository(dao)
+
+    @Provides
+    @Singleton
+    fun provideDiaryRepository(dao: DiaryDao): DiaryRepository = DiaryRepository(dao)
+
+    @Provides
+    @Singleton
+    fun providePetPreferences(
+        @ApplicationContext context: Context
+    ): PetPreferences = PetPreferences(context)
 }

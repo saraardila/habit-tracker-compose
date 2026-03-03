@@ -63,6 +63,12 @@ class HabitViewModel @Inject constructor(
         }
     }
 
+    fun renameSubTask(subTask: SubTaskEntity, newTitle: String) {
+        viewModelScope.launch {
+            repository.updateSubTask(subTask.copy(title = newTitle))
+        }
+    }
+
     // 🔥 STREAK REAL
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateStreakIfCompleted(habit: HabitEntity) {

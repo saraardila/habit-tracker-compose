@@ -25,11 +25,14 @@ sealed class NavScreen(
     val icon: ImageVector,
     val labelRes: Int
 ) {
-    object Home     : NavScreen("home",     Icons.Default.Home,        R.string.nav_home)
+    object Home     : NavScreen("home",     Icons.Default.Home,       R.string.nav_home)
+    object Badges   : NavScreen("badges",   Icons.Default.EmojiEvents, R.string.nav_badges)
+    object Diary    : NavScreen("diary",    Icons.Default.MenuBook,    R.string.nav_diary)
+    object Settings : NavScreen("settings", Icons.Default.Settings,    R.string.nav_settings)
+
+    // Estas rutas existen en el nav pero no en el bottom bar
     object Calendar : NavScreen("calendar", Icons.Default.CalendarMonth, R.string.nav_calendar)
-    object Badges   : NavScreen("badges",   Icons.Default.EmojiEvents,  R.string.nav_badges)
-    object Stats    : NavScreen("stats",    Icons.Default.BarChart,     R.string.nav_stats)
-    object Settings : NavScreen("settings", Icons.Default.Settings,     R.string.nav_settings)
+    object Stats    : NavScreen("stats",    Icons.Default.BarChart,      R.string.nav_stats)
 }
 
 @Composable
@@ -39,9 +42,8 @@ fun BottomNavBar(navController: NavController) {
 
     val items = listOf(
         NavScreen.Home,
-        NavScreen.Calendar,
         NavScreen.Badges,
-        NavScreen.Stats,
+        NavScreen.Diary,
         NavScreen.Settings
     )
 
