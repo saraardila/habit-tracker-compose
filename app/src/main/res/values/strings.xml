@@ -55,7 +55,7 @@
     <string name="streak_days">day streak</string>
 
 
-    <string name="nav_diary">Diary 📓</string>
+    <string name="nav_diary">Diary</string>
     <string name="badges_unlocked">badges unlocked</string>
     <string name="settings_subtitle">Customize your cozy space 🐻</string>
     <string name="settings_dark_mode">Dark Mode</string>
@@ -75,6 +75,7 @@
     <string name="pet_active">✓ Active</string>
     <string name="pet_tap_to_select">Tap to select</string>
 
-
+    <string name="settings_shortcuts">Home shortcuts</string>
+    <string name="settings_shortcuts_hint">Tap to select up to 4 shortcuts</string>
 </resources>
 

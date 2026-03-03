@@ -12,7 +12,7 @@ import com.nawin.habittracker.data.local.entity.SubTaskEntity
 
 @Database(
     entities = [HabitEntity::class, SubTaskEntity::class, DayCompletionEntity::class, DiaryEntity::class],
-    version = 4
+    version = 5
 )
 abstract class HabitDatabase : RoomDatabase() {
     abstract fun habitDao(): HabitDao

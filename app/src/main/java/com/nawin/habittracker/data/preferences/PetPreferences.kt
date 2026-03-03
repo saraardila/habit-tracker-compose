@@ -16,7 +16,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "pe
 
 @Singleton
 class PetPreferences @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) {
     companion object {
         val ACTIVE_PET_KEY = intPreferencesKey("active_pet")
@@ -28,6 +28,15 @@ class PetPreferences @Inject constructor(
 
     val unlockedPetsMask: Flow<Int> = context.dataStore.data
         .map { it[UNLOCKED_PETS_KEY] ?: 1 } // primera mascota siempre desbloqueada
+    val shortcutsKey = androidx.datastore.preferences.core.stringPreferencesKey("shortcuts")
+
+    val selectedShortcuts: Flow<List<String>> = context.dataStore.data.map { prefs ->
+        prefs[shortcutsKey]?.split(",") ?: listOf("calendar", "stats", "diary")
+    }
+
+    suspend fun saveShortcuts(shortcuts: List<String>) {
+        context.dataStore.edit { it[shortcutsKey] = shortcuts.joinToString(",") }
+    }
 
     suspend fun setActivePet(index: Int) {
         context.dataStore.edit { it[ACTIVE_PET_KEY] = index }
