@@ -40,4 +40,6 @@ interface HabitDao {
     @Transaction
     @Query("SELECT * FROM habits LIMIT 1")
     suspend fun getHabitsOnce(): List<HabitWithSubTasks>
+
+
 }

@@ -1,3 +1,81 @@
 <resources>
     <string name="app_name">HabitTracker</string>
+
+    <!-- Header -->
+    <string name="header_greeting">Good Morning 🍵</string>
+    <string name="progress_label">%1$d%% completed today</string>
+
+    <!-- Bear messages -->
+    <string name="bear_0">Let\'s start, little bear~ 🍵</string>
+    <string name="bear_30">You got this, cozy bear! 🌿</string>
+    <string name="bear_60">Halfway there, keep going! 🌸</string>
+    <string name="bear_90">Almost done, you\'re amazing! ⭐</string>
+    <string name="bear_100">All done! You\'re a superstar! 🎊</string>
+
+    <!-- Habits -->
+    <string name="new_habit">New Habit</string>
+    <string name="habit_title_hint">Habit title</string>
+    <string name="task_hint">Task</string>
+    <string name="add_task">Add task</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty_state">No habits yet 🌸</string>
+    <string name="create_first">Create your first habit</string>
+
+    <!-- Nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_stats">Stats</string>
+
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_badges">Badges</string>
+    <string name="nav_settings">Settings</string>
+
+
+    <!-- Habit DIalog -->
+    <string name="dialog_title">New habit 🌾</string>
+    <string name="checklist_label">Checklist</string>
+
+    <string name="badge_perfect_day">🎊 Perfect day!</string>
+    <string name="stats_title">Your Progress 🌿</string>
+    <string name="stat_tasks_done">Tasks done</string>
+    <string name="stat_habits_done">Habits done</string>
+    <string name="motiv_0">Start your first habit today! 🌱</string>
+    <string name="motiv_30">Great start, keep going! 🐻</string>
+    <string name="motiv_60">You\'re doing amazing! 🌸</string>
+    <string name="motiv_90">Almost there, cozy bear! ✨</string>
+    <string name="motiv_100">Perfect day! You\'re a star! 🎊</string>
+    <string name="topbar_title">Cozy Habits 🌸</string>
+
+    <string name="fab_add_habit">Add Habit</string>
+
+
+    <string name="greeting_morning">Good morning ☀️</string>
+    <string name="greeting_afternoon">Good afternoon 🌤️</string>
+    <string name="greeting_evening">Good evening 🌙</string>
+    <string name="streak_days">day streak</string>
+
+
+    <string name="nav_diary">Diary</string>
+    <string name="badges_unlocked">badges unlocked</string>
+    <string name="settings_subtitle">Customize your cozy space 🐻</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_version">Version</string>
+    <string name="diary_add">New Entry</string>
+    <string name="diary_empty">No entries yet\nWrite your first note! 🌸</string>
+    <string name="diary_new_entry">How are you feeling? 🌸</string>
+    <string name="diary_mood">Pick your mood</string>
+    <string name="diary_placeholder">Write about your day…</string>
+    <string name="calendar_today">Today</string>
+    <string name="calendar_completed">Completed</string>
+
+    <string name="pets_title">Your Pets 🐾</string>
+    <string name="badges_title">Achievements 🏆</string>
+    <string name="pet_active">✓ Active</string>
+    <string name="pet_tap_to_select">Tap to select</string>
+
+    <string name="settings_shortcuts">Home shortcuts</string>
+    <string name="settings_shortcuts_hint">Tap to select up to 4 shortcuts</string>
 </resources>
+

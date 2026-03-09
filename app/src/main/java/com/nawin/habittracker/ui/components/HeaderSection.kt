@@ -1,47 +1,161 @@
 package com.nawin.habittracker.ui.components
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.*
+import com.nawin.habittracker.R
+import com.nawin.habittracker.ui.theme.*
 
 @Composable
 fun HeaderSection(progress: Float) {
 
-    Column(
+    // Bounce del osito
+    val infiniteTransition = rememberInfiniteTransition(label = "bear")
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.08f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(800, easing = EaseInOutSine),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bounce"
+    )
+
+// Elegimos animación según progreso
+    val bearAnimationRes = when {
+        progress == 0f   -> R.raw.angry_dog
+        progress < 0.3f  -> R.raw.angry_dog
+        progress < 0.6f  -> R.raw.astro_dog
+        progress < 1f    -> R.raw.happyunicorn_dog
+        else             -> R.raw.happy_dog
+    }
+
+// Cargamos composición dinámica
+    val bearComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(bearAnimationRes)
+    )
+
+    val bearProgress by animateLottieCompositionAsState(
+        composition = bearComposition,
+        isPlaying = true,
+        iterations = LottieConstants.IterateForever
+    )
+
+
+
+    val message = when {
+        progress == 0f   -> stringResource(R.string.bear_0)
+        progress < 0.3f  -> stringResource(R.string.bear_30)
+        progress < 0.6f  -> stringResource(R.string.bear_60)
+        progress < 1f    -> stringResource(R.string.bear_90)
+        else             -> stringResource(R.string.bear_100)
+    }
+
+    // Lottie sparkles cuando completa todo
+    val showSparkles = progress == 1f
+    val sparklesComposition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(R.raw.celebration)
+    )
+    val sparklesProgress by animateLottieCompositionAsState(
+        composition = sparklesComposition,
+        isPlaying = showSparkles,
+        restartOnPlay = true
+    )
+
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(24.dp)
+            .padding(top = 8.dp, bottom = 16.dp)
+            .clip(RoundedCornerShape(24.dp))
+            .background(
+                Brush.linearGradient(
+                    colors = listOf(BabyPinkLight, MatchaLight)
+                )
+            )
+            .padding(20.dp),
+        contentAlignment = Alignment.Center
     ) {
 
-        Text(
-            text = "Good Morning 🌿",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+        // Lottie sparkles de fondo cuando 100%
+        if (showSparkles) {
+            LottieAnimation(
+                composition = sparklesComposition,
+                progress = { sparklesProgress },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+            )
+        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
-        val animatedProgress by animateFloatAsState(progress)
+            LottieAnimation(
+                composition = bearComposition,
+                progress = { bearProgress },
+                modifier = Modifier
+                    .size(120.dp)
+                    .scale(scale) // mantenemos el bounce
+            )
 
-        LinearProgressIndicator(
-            progress = { animatedProgress },
-            modifier = Modifier.fillMaxWidth(),
-            color = colorScheme.primary,
-            trackColor = colorScheme.onSurface.copy(alpha = 0.1f)
-        )
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MatchaDark,
+                fontWeight = FontWeight.Medium
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            // Barra de progreso
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
+                    .clip(RoundedCornerShape(5.dp))
+                    .background(Color.White.copy(alpha = 0.6f))
+            ) {
+                val animatedProgress by animateFloatAsState(
+                    targetValue = progress,
+                    animationSpec = tween(600),
+                    label = "progress"
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(animatedProgress)
+                        .height(10.dp)
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(BabyPink, Matcha)
+                            )
+                        )
+                )
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Text(
+                text = "${(progress * 100).toInt()}% completed today",
+                style = MaterialTheme.typography.labelSmall,
+                color = MatchaDark.copy(alpha = 0.7f)
+            )
+        }
     }
 }

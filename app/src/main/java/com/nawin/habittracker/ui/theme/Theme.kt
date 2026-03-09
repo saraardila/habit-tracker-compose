@@ -1,31 +1,34 @@
 package com.nawin.habittracker.ui.theme
 
-
-
-
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorScheme = lightColorScheme(
-    primary = PrimarySage,
-    secondary = AccentBeige,
-    background = BackgroundLight,
+    primary = Matcha,
+    secondary = BabyPink,
+    background = CreamWhite,
     surface = Color.White,
+    surfaceVariant = BabyPinkLight,
     onPrimary = Color.White,
-    onBackground = TextPrimary,
-    onSurface = TextPrimary
+    onSecondary = SoftBrown,
+    onBackground = SoftBrown,
+    onSurface = SoftBrown,
+    onSurfaceVariant = MatchaDark
 )
 
 private val DarkColorScheme = darkColorScheme(
-    primary = PrimarySageDark,
-    secondary = AccentBeigeDark,
-    background = BackgroundDark,
-    surface = Color(0xFF2A2A2A),
+    primary = Matcha,
+    secondary = BabyPinkDark,
+    background = MatchaDarkBg,
+    surface = MatchaDarkSurface,
+    surfaceVariant = Color(0xFF3A2A30),
     onPrimary = Color.White,
+    onSecondary = Color.White,
     onBackground = Color.White,
-    onSurface = Color.White
+    onSurface = Color.White,
+    onSurfaceVariant = BabyPinkLight
 )
 
 @Composable
