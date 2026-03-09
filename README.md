@@ -1,10 +1,10 @@
-# 🌸 Cozy Habits
+# Cozy Habits
 
 A minimal, aesthetic habit tracker built with Kotlin & Jetpack Compose. Track your daily habits, keep a mood diary, unlock cute pets, and earn badges — all wrapped in a cozy matcha & baby pink design.
 
 ---
 
-## ✨ Features
+##  Features
 
 -  **Animated pets** that react to your daily progress — unlock new ones as your streak grows
 -  **Habit tracking** with subtasks, progress bars, and swipe-to-delete
@@ -20,7 +20,7 @@ A minimal, aesthetic habit tracker built with Kotlin & Jetpack Compose. Track yo
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 <table>
   <tr>
@@ -42,7 +42,7 @@ A minimal, aesthetic habit tracker built with Kotlin & Jetpack Compose. Track yo
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -58,7 +58,7 @@ A minimal, aesthetic habit tracker built with Kotlin & Jetpack Compose. Track yo
 
 ---
 
-## 🗂 Project Structure
+##  Project Structure
 
 ```
 app/
@@ -84,34 +84,34 @@ app/
 
 ---
 
-## 🐾 Pets
+##  Pets
 
 Pets react to your daily progress and can be unlocked by maintaining streaks:
 
 | Pet | Unlock requirement |
 |---|---|
-| 🌸 Kawaii | Available from the start |
-| 🐶 Doggo | 7 day streak |
+|  Kawaii | Available from the start |
+|  Doggo | 7 day streak |
 
 More pets coming soon!
 
 ---
 
-## 🏆 Badges
+##  Badges
 
 | Badge | Requirement |
 |---|---|
-| 🌱 First Step | 1 day streak |
-| ✨ 7 Day Star | 7 day streak |
-| 🌸 2 Week Bloom | 14 day streak |
-| 🍵 Matcha Master | 21 day streak |
-| 🔥 On Fire | 30 day streak |
-| 🌿 Nature Lover | 50 day streak |
-| 👑 Habit Queen | 100 day streak |
+|  First Step | 1 day streak |
+|  7 Day Star | 7 day streak |
+|  2 Week Bloom | 14 day streak |
+|  Matcha Master | 21 day streak |
+|  On Fire | 30 day streak |
+|  Nature Lover | 50 day streak |
+|  Habit Queen | 100 day streak |
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Requirements
 
@@ -146,7 +146,7 @@ git clone https://github.com/saraardila/habit-tracker-compose.git
 
 ---
 
-## 🎨 Design
+##  Design
 
 The app uses a cozy aesthetic palette:
 
@@ -161,7 +161,7 @@ The app uses a cozy aesthetic palette:
 
 ---
 
-## 📋 Roadmap
+##  Roadmap
 
 - [ ] Calendar connected to real completion data
 - [ ] Daily notifications / reminders
@@ -172,12 +172,9 @@ The app uses a cozy aesthetic palette:
 
 ---
 
-## 📄 License
+##  License
 
 ```
 MIT License — feel free to use, modify and share 🌸
 ```
 
----
-
-<p align="center">Made with 🍵 and 🌸</p>
