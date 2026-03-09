@@ -22,7 +22,23 @@ A minimal, aesthetic habit tracker built with Kotlin & Jetpack Compose. Track yo
 
 ## 📸 Screenshots
 
-> Coming soon!
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/b4892c20-1f27-4150-a2cf-188899dd8ce7" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/7f09b809-a747-412f-b75f-7e6a38081c1b" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/c87f1b63-e0fe-485c-b761-3506947dc68d" width="220"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/62c331a3-a575-4392-b34b-1b3492c20044" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/3f5e063d-ce17-46b1-b259-5c800b818b93" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/ff76dbcf-8495-49b6-82ac-0a228540a2ff" width="220"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/82bd4d65-1eaf-4f86-a3ae-4e32a22baf15" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/be326564-f042-47b6-919e-3b952189b8bf" width="220"/></td>
+    <td><img src="https://github.com/user-attachments/assets/767d1178-3008-4ece-a00c-cfd13c91e0d3" width="220"/></td>
+  </tr>
+</table>
 
 ---
 
